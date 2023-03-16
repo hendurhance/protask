@@ -14,9 +14,9 @@ export class TasksService {
         private readonly taskRepository: TaskRepository,
     ) {}
 
-    //     getAllTasks(): Task[] {
-    //         return this.tasks;
-    //     }
+    getAllTasks(): Promise<Task[]> {
+        return this.taskRepository.find();
+    }
     //     getTasksWithFilters(filterDto: GetTaskFilterDto): Task[] {
     //         const { status, search } = filterDto;
 
