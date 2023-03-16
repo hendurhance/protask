@@ -31,15 +31,15 @@ export class TasksController {
     //         }
     //     }
 
-    //     /**
-    //      * @description Create a new task
-    //      * @param CreateTaskDto {title, description}
-    //      * @returns {Task}
-    //      */
-    //     @Post()
-    //     createTask(@Body() createTaskDto: CreateTaskDto): Task {
-    //         return this.tasksService.createTask(createTaskDto);
-    //     }
+    /**
+     * @description Create a new task
+     * @param CreateTaskDto {title, description}
+     * @returns {Task}
+     */
+    @Post()
+    createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+        return this.tasksService.createTask(createTaskDto);
+    }
 
     /**
      * @description Get a task by id
@@ -66,13 +66,13 @@ export class TasksController {
     //         return this.tasksService.updateTaskStatus(id, status);
     //     }
 
-    //     /**
-    //      * @description Delete a task by id
-    //      * @param id {string}
-    //      * @returns {void}
-    //      */
-    //     @Delete('/:id')
-    //     deleteTask(@Param('id') id: string): void {
-    //         this.tasksService.deleteTask(id);
-    //     }
+    /**
+     * @description Delete a task by id
+     * @param id {string}
+     * @returns {void}
+     */
+    @Delete('/:id')
+    async deleteTask(@Param('id') id: string): Promise<void> {
+        await this.tasksService.deleteTask(id);
+    }
 }
