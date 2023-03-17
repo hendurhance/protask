@@ -47,10 +47,14 @@ export class TasksService {
         return task;
     }
 
-    async deleteTask(id: string): Promise<void> {
-        const result = await this.tasksRepository.delete(id);
+    async deleteTask(id: string, user: User): Promise<void> {
+        const result = await this.tasksRepository.delete({
+            id,
+            userId: user.id,
+        });
+
         if (result.affected === 0) {
-            throw new NotFoundException(`Task with ID "${id}" not found`);
+            throw new NotOwnedException(`You don't own this task`);
         }
     }
 }
