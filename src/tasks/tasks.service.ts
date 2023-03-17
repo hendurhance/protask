@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TasksRepository } from './tasks.repository';
 import { Task } from './task.entity';
 import { User } from '../auth/user.entity';
+import { NotOwnedException } from 'src/common/exceptions/not-owned.exception';
 
 @Injectable()
 export class TasksService {
@@ -22,18 +23,24 @@ export class TasksService {
         return this.tasksRepository.createTask(createTaskDto, user);
     }
 
-    async getTaskById(id: string): Promise<Task> {
-        const task = await this.tasksRepository.findOneBy({ id: id });
+    async getTaskById(id: string, user: User): Promise<Task> {
+        const task = await this.tasksRepository.findOne({
+            where: { id, userId: user.id },
+        });
 
         if (!task) {
-            throw new NotFoundException(`Task with ID "${id}" not found`);
+            throw new NotOwnedException(`You don't own this task`);
         } else {
             return task;
         }
     }
 
-    async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
-        const task = await this.getTaskById(id);
+    async updateTaskStatus(
+        id: string,
+        status: TaskStatus,
+        user: User,
+    ): Promise<Task> {
+        const task = await this.getTaskById(id, user);
 
         task.status = status;
         await this.tasksRepository.save(task);

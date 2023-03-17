@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -26,7 +27,10 @@ export class Task {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne((_type) => User, (user) => user.tasks, { eager: false })
-    @Exclude({ toPlainOnly: true })
+    @ManyToOne(() => User, (user) => user.tasks, { eager: false })
+    @JoinColumn({ name: 'userId' })
     user: User;
+
+    @Column()
+    userId: string;
 }
