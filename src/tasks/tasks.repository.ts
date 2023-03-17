@@ -5,8 +5,6 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatus } from './task-status.enum';
 import { GetTaskFilterDto } from './dto/get-task.filter.dto';
 
-// I want the service to be able to use default methods from the repository
-// since EntityRepository is deprecated, fix this
 @Injectable()
 export class TasksRepository extends Repository<Task> {
     constructor(dataSource: DataSource) {
