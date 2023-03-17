@@ -7,6 +7,7 @@ import { Repository, DataSource } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PostgresErrorCode } from '../utils/postgres-error-code.utils';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersRepository extends Repository<User> {
     constructor(dataSource: DataSource) {
@@ -19,7 +20,7 @@ export class UsersRepository extends Repository<User> {
             name,
             email,
             username,
-            password,
+            password: this.hashPassword(password),
         });
         try {
             await this.save(user);
@@ -30,5 +31,10 @@ export class UsersRepository extends Repository<User> {
                 throw new InternalServerErrorException();
             }
         }
+    }
+
+    private hashPassword(password: string): string {
+        const salt = bcrypt.genSaltSync();
+        return bcrypt.hashSync(password, salt);
     }
 }
