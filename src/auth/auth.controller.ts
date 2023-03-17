@@ -29,7 +29,7 @@ export class AuthController {
     async signin(
         @Body()
         authCredentialsDto: AuthCredentialsDto,
-    ): Promise<string> {
+    ): Promise<object> {
         return this.authService.signin(authCredentialsDto);
     }
 }
