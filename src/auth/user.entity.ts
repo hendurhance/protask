@@ -1,7 +1,9 @@
+import { Task } from '../tasks/task.entity';
 import {
     Column,
     CreateDateColumn,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -24,4 +26,7 @@ export class User {
 
     @CreateDateColumn()
     createdAt: Date;
+
+    @OneToMany((_type) => Task, (task) => task.user, { eager: true })
+    tasks: Task[];
 }
