@@ -32,4 +32,5 @@ export class AuthController {
     ): Promise<object> {
         return this.authService.signin(authCredentialsDto);
     }
+
 }
