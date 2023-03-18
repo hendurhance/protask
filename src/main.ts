@@ -12,6 +12,9 @@ async function bootstrap() {
     const config: ConfigService = app.get(ConfigService);
     const port: number = config.get<number>('PORT');
 
+    // Enable CORS - Cross Origin Resource Sharing
+    app.enableCors();
+
     app.useGlobalInterceptors(new TransformInterceptor());
     app.useGlobalPipes(new ValidationPipe());
     await app.listen(port, () => {
