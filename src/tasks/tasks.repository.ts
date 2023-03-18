@@ -58,6 +58,10 @@ export class TasksRepository extends Repository<Task> {
             user,
         });
 
+        await this.save(task);
+        // it returns user object with id, username, password, salt, tasks, i do not want it to return user object
+        return task;
+
         try {
             await this.save(task);
             return task;
