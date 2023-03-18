@@ -16,7 +16,7 @@ import { Task } from './task.entity';
 import { UseGuards, Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../auth/user.entity';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { GetUser } from '../auth/decorators/get-user.decorator';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
