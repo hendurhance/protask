@@ -13,7 +13,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { GetTaskFilterDto } from './dto/get-task.filter.dto';
 import { Task } from './task.entity';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../auth/user.entity';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
@@ -21,6 +21,7 @@ import { GetUser } from 'src/auth/decorators/get-user.decorator';
 @Controller('tasks')
 @UseGuards(AuthGuard())
 export class TasksController {
+    private logger = new Logger('TasksController');
     constructor(private tasksService: TasksService) {}
 
     /**
@@ -34,6 +35,11 @@ export class TasksController {
         @Query() filterTaskDto: GetTaskFilterDto,
         @GetUser() user: User,
     ): Promise<Task[]> {
+        this.logger.verbose(
+            `User "${
+                user.username
+            }" retrieving all tasks. Filters: ${JSON.stringify(filterTaskDto)}`,
+        );
         return this.tasksService.getTasks(filterTaskDto, user);
     }
 
@@ -48,6 +54,11 @@ export class TasksController {
         @Body() createTaskDto: CreateTaskDto,
         @GetUser() user: User,
     ): Promise<Task> {
+        this.logger.verbose(
+            `User "${
+                user.username
+            }" creating a new task. Data: ${JSON.stringify(createTaskDto)}`,
+        );
         return this.tasksService.createTask(createTaskDto, user);
     }
 
@@ -59,6 +70,9 @@ export class TasksController {
      */
     @Get('/:id')
     getTaskById(@Param('id') id: string, @GetUser() user: User): Promise<Task> {
+        this.logger.verbose(
+            `User "${user.username}" retrieving task with id "${id}"`,
+        );
         return this.tasksService.getTaskById(id, user);
     }
 
@@ -75,6 +89,9 @@ export class TasksController {
         @Body() updateTaskStatusDto: UpdateTaskStatusDto,
         @GetUser() user: User,
     ): Promise<Task> {
+        this.logger.verbose(
+            `User "${user.username}" updating task with id "${id}" to status "${updateTaskStatusDto.status}"`,
+        );
         const { status } = updateTaskStatusDto;
         return this.tasksService.updateTaskStatus(id, status, user);
     }
@@ -90,6 +107,9 @@ export class TasksController {
         @Param('id') id: string,
         @GetUser() user: User,
     ): Promise<void> {
+        this.logger.verbose(
+            `User "${user.username}" deleting task with id "${id}"`,
+        );
         await this.tasksService.deleteTask(id, user);
     }
 }
