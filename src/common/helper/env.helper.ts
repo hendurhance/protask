@@ -1,13 +1,15 @@
 import { existsSync } from 'fs';
 import { resolve } from 'path';
+import { Logger } from '@nestjs/common';
 
-export function getEnvPath(dest: string): string {
-    const env: string | undefined = process.env.NODE_ENV;
-    const fallback: string = resolve(`${dest}/.env`);
-    const filename: string = env ? `${env}.env` : 'development.env';
-    let filePath: string = resolve(`${dest}/${filename}`);
+export function getEnvPath(): string {
+    const env: string | undefined = `.env.${process.env.STAGE}`;
+    const fallback: string = resolve('.env');
+    const filename: string = env ? env : fallback;
+    let filePath: string = resolve(filename);
 
     if (!existsSync(filePath)) {
+        Logger.warn(`File ${filePath} not found. Using fallback ${fallback}`);
         filePath = fallback;
     }
 
